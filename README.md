@@ -1,4 +1,4 @@
-##  Conformance Checking based on Colored Petri Net and Nested Petri Nets
+##  Conformance Checking with Colored Petri Nets and Nested Petri Nets
 
 ### Authors:
 
