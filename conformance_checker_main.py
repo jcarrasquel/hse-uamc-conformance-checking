@@ -1,6 +1,59 @@
+import sys
+from petri_net_loader import *
+import snakes.plugins
+snakes.plugins.load(["gv", "labels"], "snakes.nets", "nets")
+import random
+from nets import *
+from datetime import datetime, timedelta
+import imp
 
-# TODO Implement a main program that it will call: 
-# 1) a conformance checking method implemented in the folder conformance_checking/
-# and it will run the selected method, using as input:
-# 2) an event log localized in the folder event_logs/ 
-# 3) a Petri net model localized in the folder models/
+# ================================
+# === Conformance Checker Main ===
+# Performs a conformance checking method
+# The method is specified by the user, and must be implemented as python script in folder conformane_checking/
+# Then, it invokes the specified method taking as paremeter an input Petri net model and an event log
+# CALL EXAMPLE: python conformance_checker_main.py method_number "somewhere/models/mymodel.py" "somewhere/event_logs/my_log.xxx"
+# method_number is one of the following options:
+
+# OPTIONS OF IMPLEMENTED CONFORMANCE CHECKING METHODS
+CPN_SIMPLE_REPLAY_TUPLES = 0; # paper AIST 2020
+
+
+# === BEGIN MAIN ===
+print("")
+print("========== CONFORMANCE CHECKER v1.0 ==========")
+print("National Research University Higher School of Economics, Moscow, Russia.")
+print("Laboratory of Process-Aware Information Systems (PAIS Lab)")
+print("University of Constantine 2. Abdelhamid Mehri, Constantine, Algeria.")
+print("October 2020")
+print("==============================================")
+print("")
+
+conformanceCheckingMethod = int(sys.argv[1])
+
+modelFilename = sys.argv[2]
+
+eventLogFilename = sys.argv[3]
+
+petriNetLoader = PetriNetLoader()
+
+petriNet, modelAttributes = petriNetLoader.load(MODEL_AS_PYTHON_SCRIPT, modelFilename)
+
+print("PETRI NET MODEL: " + modelFilename)
+print("EVENT LOG: " + eventLogFilename)
+
+if conformanceCheckingMethod == CPN_SIMPLE_REPLAY_TUPLES: # AIST 2020
+	
+	print("CONFORMANCE METHOD: " + "CPN Simple Replay with Complex Tuples (AIST)")
+
+	conformanceModule = imp.load_source('CPNSimpleReplayTuples', 'conformance_checking/cpn_simple_replay_tuples.py')
+
+	initialPlaces = modelAttributes["INITIAL_PLACES"]
+
+	colors = modelAttributes["COLOR_TYPES"]
+
+	conformanceModule.CPNSimpleReplayTuples(petriNet, initialPlaces, colors, eventLogFilename, modelFilename)
+#end_if
+
+# === END MAIN ===
+

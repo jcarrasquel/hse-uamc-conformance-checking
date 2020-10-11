@@ -18,17 +18,13 @@ class PetriNetLoader:
 			# TODO For future work :-)
 			pass
 		elif option == MODEL_AS_PYTHON_SCRIPT:
-			
-			print("Loading Petri net model from file: " + source)
-			
+
 			petriNetModule = imp.load_source('buildPetriNet', source)
 			
-			petriNet = petriNetModule.buildPetriNet() # taking Petri net from file
-
-			print("Petri net successfully loaded!")
+			petriNet, modelAttributes = petriNetModule.buildPetriNet() # taking Petri net from file
 			
 		else:
 			print("Invalid option when loading a Petri net...")
 			return None
 
-		return petriNet
+		return petriNet, modelAttributes
