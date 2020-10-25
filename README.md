@@ -9,7 +9,7 @@
 National Research University Higher School of Economics, Moscow, Russia.<br>
 University of Constantine 2 — Abdelhamid Mehri, Constantine, Algeria.
 
-### Update: Quick steps to test our conformance checking method (simple replay) between Colored Petri Nets with tuples:
+### Update: Quick steps to test our conformance checking method (simple replay) using Colored Petri Nets with tuples:
 
 - Download this repository. The tool has been developed with Python v3.5.
 - Execute the command: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` where 0 stands for the conformance checking method replay of CPNs with tuples, and the following files are a sample of a CPN model (coded using SNAKES) and an event log.
