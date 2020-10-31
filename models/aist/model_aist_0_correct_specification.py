@@ -142,8 +142,6 @@ def buildPetriNet():
 		generateRandomOrders()
 		petriNet.add_place(Place("p1", randomBuyOrders, TYPE_BUYER))
 		petriNet.add_place(Place("p2", randomSellOrders, TYPE_SELLER))
-		print(petriNet.place("p1").tokens)
-		print(petriNet.place("p2").tokens)
 	else:
 		petriNet.add_place(Place("p1", [], TYPE_BUYER))
 		petriNet.add_place(Place("p2", [], TYPE_SELLER))

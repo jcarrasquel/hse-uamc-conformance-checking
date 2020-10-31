@@ -16,7 +16,10 @@ import imp
 # method_number is one of the following options:
 
 # OPTIONS OF IMPLEMENTED CONFORMANCE CHECKING METHODS
+
 CPN_SIMPLE_REPLAY_TUPLES = 0; # paper AIST 2020
+
+CPN_MOVETOKENS_REPLAY_ATOMICVALUES = 1; # journal work on progress...
 
 
 # === BEGIN MAIN ===
@@ -55,5 +58,17 @@ if conformanceCheckingMethod == CPN_SIMPLE_REPLAY_TUPLES: # AIST 2020
 	conformanceModule.CPNSimpleReplayTuples(petriNet, initialPlaces, colors, eventLogFilename, modelFilename)
 #end_if
 
-# === END MAIN ===
+if conformanceCheckingMethod == CPN_MOVETOKENS_REPLAY_ATOMICVALUES: # JOURNAL PAPER IN PROGRESS...
 
+	print("CONFORMANCE METHOD: " + "CPN Moving-Tokens Replay with Atomic Data Tokens")
+
+	conformanceModule = imp.load_source('CPNJumpReplayAtomicDataTokens', 'conformance_checking/cpn_replay_simple.py')
+
+	initialPlaces = modelAttributes["INITIAL_PLACES"]
+
+	colors = modelAttributes["COLOR_TYPES"]
+
+	conformanceModule.CPNJumpReplayAtomicDataTokens(petriNet, initialPlaces, colors, eventLogFilename, modelFilename)
+#end_if
+
+# === END MAIN ===
