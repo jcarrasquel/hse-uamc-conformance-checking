@@ -67,7 +67,9 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 	nonFittingTraces = 0
 	numberOfTraces = 0
 
-	deviations = 0 # number of times that all resources asked to consume did not appear in the input places of a transition to fire, so we needed to move.
+	# GENERAL METRICS
+	traceFitness = {} # save fitness of each trace. Then, sum them and perform the average, dividing by the number of traces.
+	traceFitnessByClass = {}
 
 	currentTraceIdentifier = None
 
@@ -82,8 +84,11 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 	eventDeviationsFilename = "conformance_artifact_deviations_" + timestamp.strftime("%d-%m-%Y") + "_" + timestamp.strftime("%H%M%S")
 	eventDeviationsFilename +=  "_" + timestamp.strftime("%f")[:-3] + ".csv"
 
+	fitnessFilename = "conformance_artifact_fitness_" + timestamp.strftime("%d-%m-%Y") + "_" + timestamp.strftime("%H%M%S")
+	fitnessFilename +=  "_" + timestamp.strftime("%f")[:-3] + ".csv"
+
 	# Open event log (we assume the use of a file in CSV format)
-	with open(eventLogFilename, "r") as eventLog, open(nonFittingTracesFilename, 'w') as fileNonFittingTraces, open(eventDeviationsFilename, 'w') as fileDeviations:
+	with open(eventLogFilename, "r") as eventLog, open(nonFittingTracesFilename, 'w') as fileNonFittingTraces, open(eventDeviationsFilename, 'w') as fileDeviations, open(fitnessFilename, 'w') as fileFitness:
 
 		line = eventLog.readline()
 
@@ -113,10 +118,16 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 			# Update the "number of traces" counter
 			numberOfTraces = numberOfTraces + 1
 
-			# TRACE METRICS
+			# === TRACE METRICS ===
 			jumpedTokens = 0 # number of jumps
 			consumedTokens = 0 # number of consumed tokens
 			producedTokens = 0 # number of produced tokens
+
+			jumpedTokensByClass = {}
+			frequencyTokensByClass = {}
+			for rtype in colors:
+				jumpedTokensByClass[rtype] = 0
+				frequencyTokensByClass[rtype] = 0
 
 			# ==== LOOK FOR ALL DISTINCT RESOURCES IN THE TRACE ===
 			distinctResourceIdentifiers = [] # in this array, collect resource identifiers (distinct tokens)
@@ -176,19 +187,24 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 					# Checking if the identifier belongs to the set of available identifiers in the 
 					# input place of type 'rtype'
 					if e.eventResources[rtype] not in tokenIdentifiers[rtype]:
-						deviations = deviations + 1
 						deviationOccurred = True
 						rvalue = e.eventResources[rtype]
 						nonAvailableResources[rtype] = rvalue # token with id. 'rvalue' of type 'rtype' is not the input place of t. 
+
+					# UPDATE FREQUENCY OF RESOURCES OF A CLASS (USED FOR METRIC)
+					frequencyTokensByClass[rtype] = frequencyTokensByClass[rtype] + 1
 
 				if deviationOccurred == True:
 					# Indicate in the file of deviations what happened. Resources that were not available
 					if tokenJumpHeuristic == False:
 						break
 
-
 					# ========  TOKEN JUMP HEURISTIC (movement of tokens within the marking to keep replaying!) ========
 					for rtype in nonAvailableResources:
+
+						# UPDATE FREQUENCY OF "JUMPED" RESOURCES BY CLASS (USED FOR METRIC)
+						jumpedTokensByClass[rtype] = jumpedTokensByClass[rtype] + 1
+
 						rvalue = nonAvailableResources[rtype]
 						for p in cpn.place(): # look in places of the net for resource with id. "rvalue" of color "rtype"
 							placeType = p.checker()
@@ -202,7 +218,6 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 										inputPlace = str(cpn.transition(selectedTransition).input()[i][0])
 										if cpn.place(inputPlace).checker() == rtype:
 											cpn.place(inputPlace).add(rvalue)
-
 											jumpDescription = "," + rvalue + "," + p.name + "," + inputPlace # to print in the log that token with id. "rvalue" jumped from place "p.name" to place "inputPlace" of the transition to fire
 											fileDeviations.write(str(e.traceIdentifier) + "," + str(e.timestamp) + "," + str(e.activity) + jumpDescription + "\n")	
 											break
@@ -246,19 +261,21 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 
 			# end_for <end of replaying events of a given trace>
 			
-			# TODO <--- EXPERIMENT STILL ON DEVELOPMENT (FITNESS METRIC)
-			print(consumedTokens)
-			print(producedTokens)
-			print(jumpedTokens)
-			traceFitness = 1 - ( (2 * jumpedTokens) / (consumedTokens + producedTokens) )
-			print(currentTraceIdentifier + " : " + str(traceFitness))
+			# === PRINT FITNESS OF THIS TRACE AND FITNESS OF EACH RESOURCE IN A FILE ===
+			traceFitness[currentTraceIdentifier] = 1 - ( (2 * jumpedTokens) / (consumedTokens + producedTokens) )
+			fitLine = str(currentTraceIdentifier)
+			fitLine = fitLine + "," + str(traceFitness[currentTraceIdentifier])
 
-			# IDEAS:
-			# - Nice the thing of printing on each iteration (put it as an "elective" option)
-			# - When a deviation is found. As an elective option, print the image.
+			# Save fitness by resource class
+			traceFitnessByClass[currentTraceIdentifier] = {}
+			for rtype in colors:
+				traceFitnessByClass[currentTraceIdentifier][rtype] = 1 - (jumpedTokensByClass[rtype] / frequencyTokensByClass[rtype])
+				fitLine = fitLine + "," + str(traceFitnessByClass[currentTraceIdentifier][rtype])
+
+			fileFitness.write(fitLine + "\n")
 
 			if deviationOccurred == True:
-				# If while replaying the previous trace, there was a deviation,
+				# If while replaying the previous trace, there was a deviation (that is, at least one jump occurred,
 				# then update the counter of "non-fitting traces"
 				nonFittingTraces = nonFittingTraces + 1
 
@@ -274,15 +291,24 @@ def CPNJumpReplayAtomicDataTokens(inputModel, initialPlaces, colors, eventLogFil
 		#end_while <end of replaying all traces recorded in the log>
 
 		# === PRINTING SUMMARY STATISTICS ===
+
+		fitness = sum(traceFitness.values()) / len(traceFitness) # average trace fitness (a.k.a fitness with this log)
+
 		print("")
 		print("========== CONFORMANCE RESULTS ===========")
 		print("Total number of traces: " + str(numberOfTraces))
-		print("Non-fitting traces: " + str(nonFittingTraces))
+		print("Non-fitting traces (where at least one jump occurred): " + str(nonFittingTraces))
 		print("")
-		fitness = 1 - (float(nonFittingTraces) / float(numberOfTraces) )
-		print("Fitness : " + str("%.4f" % round(fitness,4)))
+		print("Average Trace Fitness : " + str("%.4f" % round(fitness,4)))
 		print("")
-		print("Deviations detected (non-available resources): " + str(deviations))
+		print("Average Fitness by Resource Class")
+
+		for rtype in colors:
+			accum = 0
+			for traceId in traceFitnessByClass:
+				accum = accum + traceFitnessByClass[traceId][rtype]
+			print(str(rtype) + " : " + str("%.5f" % round(accum/numberOfTraces, 5)))
+
 		print("")
 		print("Event deviations written in file: " + eventDeviationsFilename)
 		print("Non-fitting traces cloned to file: " + nonFittingTracesFilename)
