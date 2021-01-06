@@ -21,6 +21,7 @@ CPN_SIMPLE_REPLAY_TUPLES = 0; # paper AIST 2020
 
 CPN_MOVETOKENS_REPLAY_ATOMICVALUES = 1; # journal work on progress...
 
+NPN_MOVETOKENS_REPLAY_NETTOKENS_DIRECT = 2; # journal work on progress...
 
 # === BEGIN MAIN ===
 print("")
@@ -28,7 +29,7 @@ print("========== CONFORMANCE CHECKER v1.0 ==========")
 print("National Research University Higher School of Economics, Moscow, Russia.")
 print("Laboratory of Process-Aware Information Systems (PAIS Lab)")
 print("University of Constantine 2. Abdelhamid Mehri, Constantine, Algeria.")
-print("October 2020")
+print("January 2020")
 print("==============================================")
 print("")
 
@@ -71,4 +72,21 @@ if conformanceCheckingMethod == CPN_MOVETOKENS_REPLAY_ATOMICVALUES: # JOURNAL PA
 	conformanceModule.CPNJumpReplayAtomicDataTokens(petriNet, initialPlaces, colors, eventLogFilename, modelFilename)
 #end_if
 
-# === END MAIN ===
+if conformanceCheckingMethod == NPN_MOVETOKENS_REPLAY_NETTOKENS_DIRECT: # JOURNAL PAPER IN PROGRESS...
+
+	print("CONFORMANCE METHOD: " + "Nested Petri Nets - Moving-Tokens Replay with Net Tokens (Direct Approach)")
+
+	conformanceModule = imp.load_source('CPNJumpReplayAtomicDataTokens', 'conformance_checking/npn_replay_direct.py')
+
+	initialPlaces = modelAttributes["INITIAL_PLACES"]
+
+	finalPlaces = modelAttributes["FINAL_PLACES"]
+
+	agentClasses = modelAttributes["AGENT_TYPES"]
+
+	agentTemplates = modelAttributes["AGENT_TEMPLATES"]
+
+	conformanceModule.NPNDirectReplay(petriNet, initialPlaces, finalPlaces, agentClasses, eventLogFilename, modelFilename, agentTemplates)
+#end_if
+
+# ========= END MAIN =========
