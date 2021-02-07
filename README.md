@@ -11,17 +11,20 @@
 
 ---
 For quick testing, download the repository and execute any of the methods below. The methods have been tested with Python v3.5.
+A method is invoked by the script `conformance_checker_main.py` using an integer value as a first argument (see examples below)
+The next arguments are the Petri net model (coded using SNAKES) and an event log in CSV format.
 
 ### Conformance Checking Methods
 
 - **Replay of CPNs with tuple-style tokens and complex arc expressions (AIST-2020)**
 
     - Command example: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` 
-    - Argument `0` stands for the conformance checking method replay of CPNs with tuples.
-    - the next file arguments are a sample of a CPN model (coded using SNAKES) and an event log.
-    - The output shall be two files. One file will consist of non-fitting traces, whereas a second file will consist of specific event deviations found in each non-fitting trace.
-    
-    
+
+- **Replay of CPNs with atomic tokens using a** ***token jump heuristic***
+    - Command example: `python3 conformance_checker_main.py 1 models/model_1_cpn_simple.py event_logs/eventlog_simple_incorrect.csv`
+
+- **Replay of NPNs using a** ***token jump heuristic***
+    - Command example: `python3 conformance_checker_main.py 2 models/model_3_npn_simple.py event_logs/eventlog_multiagentsystem_example.csv`
 
 ### Useful resources:
 
