@@ -18,13 +18,13 @@ The next arguments are the Petri net model (coded using SNAKES) and an event log
 
 - **Replay of CPNs with tuple-style tokens and complex arc expressions (AIST-2020)**
 
-    - Command example: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` 
+    - Quick example: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` 
 
 - **Replay of CPNs with atomic tokens using a** ***token jump heuristic***
-    - Command example: `python3 conformance_checker_main.py 1 models/model_1_cpn_simple.py event_logs/eventlog_simple_incorrect.csv`
+    - Quick example: `python3 conformance_checker_main.py 1 models/model_1_cpn_simple.py event_logs/eventlog_simple_incorrect.csv`
 
 - **Replay of NPNs using a** ***token jump heuristic***
-    - Command example: `python3 conformance_checker_main.py 2 models/model_3_npn_simple.py event_logs/eventlog_multiagentsystem_example.csv`
+    - Quick example: `python3 conformance_checker_main.py 2 models/model_3_npn_simple.py event_logs/eventlog_multiagentsystem_example.csv`
 
 ### Useful resources:
 
