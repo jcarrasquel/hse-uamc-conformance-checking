@@ -1,5 +1,5 @@
 ##  Conformance Checking with Colored Petri Nets and Nested Petri Nets
----
+
 ### Authors:
 
 - Khalil Mecheraoui - k_mecheraoui@esi.dz
