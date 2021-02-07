@@ -1,9 +1,9 @@
 ##  Conformance Checking with Colored Petri Nets and Nested Petri Nets
-
+---
 ### Authors:
 
 - Khalil Mecheraoui - k_mecheraoui@esi.dz
-- Julio C. Carrasquel - jcarrasquel@hse.ru
+- [Julio C. Carrasquel](https://www.hse.ru/staff/jcarrasquel) - jcarrasquel@hse.ru
 - Irina A. Lomazova - ilomazova@hse.ru
 
 National Research University Higher School of Economics, Moscow, Russia.<br>
