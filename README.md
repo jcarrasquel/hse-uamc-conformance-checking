@@ -10,18 +10,22 @@
 *University of Constantine 2 — Abdelhamid Mehri, Constantine, Algeria.*
 
 ---
+For quick testing, download the repository and execute any of the methods below. The methods have been tested with Python v3.5.
 
 ### Conformance Checking Methods
 
-- Download this repository. The tool has been developed with Python v3.5.
-- Execute the command: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` where 0 stands for the conformance checking method replay of CPNs with tuples, and the following files are a sample of a CPN model (coded using SNAKES) and an event log.
-- The output shall be two files. One file will consist of non-fitting traces, whereas a second file will consist of specific event deviations found in each non-fitting trace.
+- **Replay of CPNs with tuple-style tokens and complex arc expressions (AIST-2020)**
 
----
+    - Command example: `python3 conformance_checker_main.py 0 models/aist/model_aist_0_correct_specification.py event_logs/aist/demo/eventlog_real_example0_deviation_ALL.csv` 
+    - Argument `0` stands for the conformance checking method replay of CPNs with tuples.
+    - the next file arguments are a sample of a CPN model (coded using SNAKES) and an event log.
+    - The output shall be two files. One file will consist of non-fitting traces, whereas a second file will consist of specific event deviations found in each non-fitting trace.
+    
+    
 
 ### Useful resources:
 
-- Checking Conformance between Colored Petri Nets and Event Logs (AIST-2020) [[Slides]](https://drive.google.com/file/d/1UONWeWZKMFw6n9trU4hxREWnynPxsKaA/view) [[Paper]](https://drive.google.com/file/d/175HBPYy9jXDtSQ_SE4CeqyoG41KNkYdm/view) [[Talk]](https://www.youtube.com/watch?v=Qkr9D7KXHno)
+* Checking Conformance between Colored Petri Nets and Event Logs (AIST-2020) [[Slides]](https://drive.google.com/file/d/1UONWeWZKMFw6n9trU4hxREWnynPxsKaA/view) [[Paper]](https://drive.google.com/file/d/175HBPYy9jXDtSQ_SE4CeqyoG41KNkYdm/view) [[Talk]](https://www.youtube.com/watch?v=Qkr9D7KXHno)
 
 ---
 
