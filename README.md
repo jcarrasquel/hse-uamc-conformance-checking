@@ -29,6 +29,7 @@ The next arguments are the Petri net model (coded using SNAKES) and an event log
 ### Useful resources:
 
 * Checking Conformance between Colored Petri Nets and Event Logs (AIST-2020) [[Slides]](https://drive.google.com/file/d/1UONWeWZKMFw6n9trU4hxREWnynPxsKaA/view) [[Paper]](https://drive.google.com/file/d/175HBPYy9jXDtSQ_SE4CeqyoG41KNkYdm/view) [[Talk]](https://www.youtube.com/watch?v=Qkr9D7KXHno)
+* Compositional Conformance Checking of Nested Petri Nets and Event Logs of Multi-Agent Systems (MACSPro-2020) [[Paper]](http://ceur-ws.org/Vol-2795/)
 
 ---
 
