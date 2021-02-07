@@ -26,6 +26,8 @@ The next arguments are the Petri net model (coded using SNAKES) and an event log
 - **Replay of NPNs using a** ***token jump heuristic***
     - Quick example: `python3 conformance_checker_main.py 2 models/model_3_npn_simple.py event_logs/eventlog_multiagentsystem_example.csv`
 
+---
+
 ### Useful resources:
 
 * Checking Conformance between Colored Petri Nets and Event Logs (AIST-2020) [[Slides]](https://drive.google.com/file/d/1UONWeWZKMFw6n9trU4hxREWnynPxsKaA/view) [[Paper]](https://drive.google.com/file/d/175HBPYy9jXDtSQ_SE4CeqyoG41KNkYdm/view) [[Talk]](https://www.youtube.com/watch?v=Qkr9D7KXHno)
